@@ -308,7 +308,7 @@ const songs = [
         release: "2026-08-13",
         album: "Remixes",
         audio: "мы растворяемся вдвоём (remix).mp3",
-        cover: "covers/album_remixes.jpg",
+        cover: "мы растворяемся вдвоем (nordic remix).jpg",
         lyrics: `
 Здесь будет текст песни "Мы растворяемся вдвоём (Remix)"
         `
