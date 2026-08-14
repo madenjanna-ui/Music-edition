@@ -6,7 +6,7 @@ const albumOrder = ["Моя", "Новый", "Мой ангел", "Новая в�
 const albumMeta = {
     "Моя": { cover: "covers/album_moya.jpg", subtitle: "6 композиций" },
     "Новый": { cover: "covers/album_novyi.jpg", subtitle: "7 композиций" },
-    "Мой ангел": { cover: "covers/album_moi_angel.jpg", subtitle: "5 композиций" },
+    "Мой ангел": { cover: "covers/My angel.PNG", subtitle: "5 композиций" },
     "Новая веха": { cover: "covers/album_novaya_veha.jpg", subtitle: "5 композиций" },
     "Remixes": { cover: "covers/album_remixes.jpg", subtitle: "4 композиции" },
     "Люмейя": { cover: "covers/album_lumeya.jpg", subtitle: "5 композиций" },
