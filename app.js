@@ -62,8 +62,55 @@ function updatePlayerFavorite(){const s=songs[currentSong];if(!s)return;const a=
 function updatePlayerBackground(s){playerBg.style.backgroundImage=`url("${s.cover}")`}
 function setCoverPlaying(v){cover.classList.toggle('playing',v)}
 function setPlayIcon(v){playIcon.innerHTML=v?'<path d="M7 5h3v14H7zM14 5h3v14h-3z"/>':'<path d="M8 5v14l11-7z"/>';playBtn.setAttribute('aria-label',v?'Пауза':'Воспроизвести')}
+
+// =========================
+// iPhone / CarPlay / системные медиаконтролы
+// =========================
+function updateMediaSession(s){
+ if(!('mediaSession' in navigator) || !s) return;
+ try{
+  const artwork = s.cover ? [{
+   src: new URL(s.cover, document.baseURI).href,
+   sizes: '512x512',
+   type: s.cover.toLowerCase().endsWith('.jpg') || s.cover.toLowerCase().endsWith('.jpeg') ? 'image/jpeg' : 'image/png'
+  }] : [];
+  navigator.mediaSession.metadata = new MediaMetadata({
+   title: s.title || 'MaDen',
+   artist: s.artist || 'MaDen',
+   album: s.album || 'MaDenMusic',
+   artwork
+  });
+  navigator.mediaSession.playbackState = audio.paused ? 'paused' : 'playing';
+ }catch(e){console.warn('Media Session metadata:',e)}
+}
+function updateMediaPosition(){
+ if(!('mediaSession' in navigator) || !Number.isFinite(audio.duration) || audio.duration <= 0) return;
+ try{
+  navigator.mediaSession.setPositionState({
+   duration: audio.duration,
+   playbackRate: audio.playbackRate || 1,
+   position: Math.min(Math.max(audio.currentTime,0),audio.duration)
+  });
+ }catch(e){}
+}
+function setupMediaSession(){
+ if(!('mediaSession' in navigator)) return;
+ const handlers={
+  play:()=>{const p=audio.play();if(p)p.catch(()=>{})},
+  pause:()=>audio.pause(),
+  nexttrack:()=>{const was=!audio.paused&&!audio.ended;openSong(getNextIndex(),was)},
+  previoustrack:()=>{const was=!audio.paused&&!audio.ended;openSong(getPrevIndex(),was)},
+  seekbackward:(details)=>{audio.currentTime=Math.max(0,audio.currentTime-(details.seekOffset||10));updateMediaPosition()},
+  seekforward:(details)=>{audio.currentTime=Math.min(audio.duration||0,audio.currentTime+(details.seekOffset||10));updateMediaPosition()},
+  seekto:(details)=>{if(Number.isFinite(details.seekTime)){audio.currentTime=Math.min(Math.max(details.seekTime,0),audio.duration||details.seekTime);updateMediaPosition()}}
+ };
+ Object.entries(handlers).forEach(([action,handler])=>{
+  try{navigator.mediaSession.setActionHandler(action,handler)}catch(e){console.debug(`Media Session action ${action} unavailable`,e)}
+ });
+}
+setupMediaSession();
 function updateMini(){const s=songs[currentSong];if(!s){miniPlayer.classList.add('hidden-mini');return}miniCover.src=s.cover;miniTitle.textContent=s.title;miniArtist.textContent=s.artist||'MaDen';miniPlay.textContent=audio.paused?'▶':'Ⅱ';miniPlayer.classList.remove('hidden-mini')}
-async function openSong(index,autoPlay=false){const s=songs[index];if(!s)return;if(!(await audioAvailable(s))){toastMsg('🎵 Скоро будет');return}currentSong=index;cover.src=s.cover;songTitle.textContent=s.title;songArtist.textContent=s.artist||'MaDen';lyrics.textContent=s.lyrics||'';updatePlayerBackground(s);updatePlayerFavorite();audio.pause();audio.src=encodeURI(s.audio);audio.load();progress.value=0;currentTime.textContent='0:00';duration.textContent='0:00';setPlayIcon(false);setCoverPlaying(false);player.classList.remove('hidden');updateMini();if(autoPlay){const p=audio.play();if(p)p.catch(()=>toastMsg('Не удалось воспроизвести файл'))}}
+async function openSong(index,autoPlay=false){const s=songs[index];if(!s)return;if(!(await audioAvailable(s))){toastMsg('🎵 Скоро будет');return}currentSong=index;cover.src=s.cover;songTitle.textContent=s.title;songArtist.textContent=s.artist||'MaDen';lyrics.textContent=s.lyrics||'';updatePlayerBackground(s);updatePlayerFavorite();updateMediaSession(s);audio.pause();audio.src=encodeURI(s.audio);audio.load();progress.value=0;currentTime.textContent='0:00';duration.textContent='0:00';setPlayIcon(false);setCoverPlaying(false);player.classList.remove('hidden');updateMini();if(autoPlay){const p=audio.play();if(p)p.catch(()=>toastMsg('Не удалось воспроизвести файл'))}}
 playBtn.onclick=()=>{if(!audio.src)return;const p=audio.paused?audio.play():audio.pause();if(p)p.catch(()=>{})};
 nextBtn.onclick=()=>{const was=!audio.paused&&!audio.ended;openSong(getNextIndex(),was)};prevBtn.onclick=()=>{const was=!audio.paused&&!audio.ended;openSong(getPrevIndex(),was)};closePlayer.onclick=()=>{player.classList.add('hidden');updateMini()};miniOpen.onclick=()=>player.classList.remove('hidden');miniPlay.onclick=()=>{if(audio.paused){const p=audio.play();if(p)p.catch(()=>{})}else audio.pause()};favoritePlayer.onclick=()=>{if(songs[currentSong])toggleFavorite(songs[currentSong].id)};
 function getNextIndex(){if(repeatMode==='one')return currentSong;if(shuffleMode){const pool=songs.map((_,i)=>i).filter(i=>i!==currentSong&&!playHistory.includes(i));const p=pool.length?pool:songs.map((_,i)=>i).filter(i=>i!==currentSong);const n=p[Math.floor(Math.random()*p.length)];playHistory.push(n);if(playHistory.length>=songs.length)playHistory=[n];return n}return currentSong+1>=songs.length?0:currentSong+1}
@@ -71,6 +118,6 @@ function getPrevIndex(){if(shuffleMode&&playHistory.length>1){playHistory.pop();
 shuffleBtn.onclick=()=>{shuffleMode=!shuffleMode;playHistory=[currentSong];localStorage.setItem('madenmusic_shuffle',shuffleMode);shuffleBtn.classList.toggle('active',shuffleMode);toastMsg(shuffleMode?'🔀 Случайное воспроизведение':'Обычный порядок')};
 repeatBtn.onclick=()=>{repeatMode=repeatMode==='off'?'all':repeatMode==='all'?'one':'off';localStorage.setItem('madenmusic_repeat',repeatMode);updateRepeat()};
 function updateRepeat(){repeatBtn.classList.toggle('active',repeatMode!=='off');repeatBadge.textContent=repeatMode==='one'?'1':''}
-audio.onended=()=>openSong(getNextIndex(),true);audio.onplay=()=>{playing=true;setPlayIcon(true);setCoverPlaying(true);updateMini()};audio.onpause=()=>{playing=false;setPlayIcon(false);setCoverPlaying(false);updateMini()};audio.onloadedmetadata=()=>{progress.max=Math.floor(audio.duration)||0;duration.textContent=formatTime(audio.duration)};audio.ontimeupdate=()=>{progress.value=Math.floor(audio.currentTime)||0;currentTime.textContent=formatTime(audio.currentTime)};progress.oninput=()=>audio.currentTime=Number(progress.value);function formatTime(sec){if(!Number.isFinite(sec))return'0:00';const m=Math.floor(sec/60),s=Math.floor(sec%60);return `${m}:${String(s).padStart(2,'0')}`}
+audio.onended=()=>openSong(getNextIndex(),true);audio.onplay=()=>{playing=true;setPlayIcon(true);setCoverPlaying(true);updateMini();if('mediaSession' in navigator){navigator.mediaSession.playbackState='playing';updateMediaSession(songs[currentSong])}};audio.onpause=()=>{playing=false;setPlayIcon(false);setCoverPlaying(false);updateMini();if('mediaSession' in navigator)navigator.mediaSession.playbackState='paused'};audio.onloadedmetadata=()=>{progress.max=Math.floor(audio.duration)||0;duration.textContent=formatTime(audio.duration);updateMediaPosition()};audio.ontimeupdate=()=>{progress.value=Math.floor(audio.currentTime)||0;currentTime.textContent=formatTime(audio.currentTime);updateMediaPosition()};progress.oninput=()=>audio.currentTime=Number(progress.value);function formatTime(sec){if(!Number.isFinite(sec))return'0:00';const m=Math.floor(sec/60),s=Math.floor(sec%60);return `${m}:${String(s).padStart(2,'0')}`}
 playAlbum.onclick=async()=>{const list=albumSongs(currentAlbum);const first=list.find(s=>s._available!==false);if(first)openSong(songs.findIndex(s=>s.id===first.id),true)};
 shuffleBtn.classList.toggle('active',shuffleMode);updateRepeat();renderHome();renderAlbumGrid(albumGridFull);player.classList.add('hidden');miniPlayer.classList.add('hidden-mini');

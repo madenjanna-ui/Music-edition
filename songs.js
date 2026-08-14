@@ -332,7 +332,7 @@ const songs = [
         release: "2026-08-13",
         album: "Remixes",
         audio: "13.08-2.mp3",
-        cover: "covers/album_remixes.jpg",
+        cover: "Одним воздухом дышать (Remix).jpg",
         lyrics: `
 Здесь будет текст песни "Одним воздухом дышать (Remix)"
         `
