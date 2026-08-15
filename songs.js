@@ -4,12 +4,12 @@
 const albumOrder = ["Моя", "Новый", "Мой ангел", "Новая веха", "Remixes", "Люмейя"];
 
 const albumMeta = {
-    "Моя": { cover: "covers/album_moya.jpg", subtitle: "6 композиций" },
-    "Новый": { cover: "covers/album_novyi.jpg", subtitle: "7 композиций" },
+    "Моя": { cover: "covers/moya.png", subtitle: "6 композиций" },
+    "Новый": { cover: "covers/novyi.png", subtitle: "7 композиций" },
     "Мой ангел": { cover: "covers/My angel.PNG", subtitle: "5 композиций" },
-    "Новая веха": { cover: "covers/album_novaya_veha.jpg", subtitle: "5 композиций" },
-    "Remixes": { cover: "covers/album_remixes.jpg", subtitle: "4 композиции" },
-    "Люмейя": { cover: "covers/album_lumeya.jpg", subtitle: "5 композиций" },
+    "Новая веха": { cover: "covers/Novaya veha.png", subtitle: "5 композиций" },
+    "Remixes": { cover: "covers/remixes.png", subtitle: "4 композиции" },
+    "Люмейя": { cover: "covers/album_lumeya.jpeg", subtitle: "5 композиций" },
 };
 
 const songs = [
@@ -20,7 +20,7 @@ const songs = [
         release: "2026-08-02",
         album: "Моя",
         audio: "Моя – Жизнь моей души.mp3",
-        cover: "covers/track_zhizn_moei_dushi.jpg",
+        cover: "covers/moya.png",
         lyrics: `
 Здесь будет текст песни "Жизнь моей души"
         `
@@ -32,7 +32,7 @@ const songs = [
         release: null,
         album: "Моя",
         audio: "Наша жизнь — это сила.mp3",
-        cover: "covers/album_moya.jpg",
+        cover: "covers/moya.png",
         lyrics: `
 Здесь будет текст песни "Наша жизнь — это сила"
         `
@@ -44,7 +44,7 @@ const songs = [
         release: null,
         album: "Моя",
         audio: "ты лилия.mp3",
-        cover: "covers/album_moya.jpg",
+        cover: "covers/moya.png",
         lyrics: `
 Здесь будет текст песни "Ты лилия"
         `
@@ -56,7 +56,7 @@ const songs = [
         release: null,
         album: "Моя",
         audio: "Смыслом жизнь полна.mp3",
-        cover: "covers/album_moya.jpg",
+        cover: "covers/moya.png",
         lyrics: `
 Здесь будет текст песни "Смыслом жизнь полна"
         `
@@ -68,7 +68,7 @@ const songs = [
         release: "2026-08-03",
         album: "Моя",
         audio: "Моя – Эсфирь.mp3",
-        cover: "covers/track_esfir.jpg",
+        cover: "covers/moya.png",
         lyrics: `
 Здесь будет текст песни "Эсфирь"
         `
@@ -80,7 +80,7 @@ const songs = [
         release: null,
         album: "Моя",
         audio: "10.01.mp3",
-        cover: "covers/album_moya.jpg",
+        cover: "covers/moya.png",
         lyrics: `
 Здесь будет текст песни "10.01"
         `
@@ -92,7 +92,7 @@ const songs = [
         release: "2026-08-05",
         album: "Новый",
         audio: "tvoy vzglayd.mp3",
-        cover: "covers/track_tvoy_vzglyad.jpg",
+        cover: "covers/moya.png",
         lyrics: `
 Здесь будет текст песни "Твой взгляд"
         `
@@ -104,7 +104,7 @@ const songs = [
         release: null,
         album: "Новый",
         audio: "Танец жизни.mp3",
-        cover: "covers/album_novyi.jpg",
+        cover: "covers/novyi.png",
         lyrics: `
 Здесь будет текст песни "Танец жизни"
         `
@@ -128,7 +128,7 @@ const songs = [
         release: null,
         album: "Новый",
         audio: "Взрыв далекой звезды.mp3",
-        cover: "covers/album_novyi.jpg",
+        cover: "covers/novyi.png",
         lyrics: `
 Здесь будет текст песни "Взрыв далёкой звезды"
         `
@@ -140,7 +140,7 @@ const songs = [
         release: null,
         album: "Новый",
         audio: "Целого мира мало.mp3",
-        cover: "covers/album_novyi.jpg",
+        cover: "covers/novyi.png",
         lyrics: `
 Здесь будет текст песни "Целого мира мало"
         `
@@ -164,7 +164,7 @@ const songs = [
         release: null,
         album: "Новый",
         audio: "Моих желаний аромат.mp3",
-        cover: "covers/album_novyi.jpg",
+        cover: "covers/novyi.png",
         lyrics: `
 Здесь будет текст песни "Моих желаний аромат"
         `
@@ -248,7 +248,7 @@ const songs = [
         release: null,
         album: "Новая веха",
         audio: "Когда мы вместе.mp3",
-        cover: "covers/album_novaya_veha.jpg",
+        cover: "covers/Novaya veha.png",
         lyrics: `
 Здесь будет текст песни "Когда мы вместе"
         `
@@ -260,7 +260,7 @@ const songs = [
         release: "2026-08-06",
         album: "Новая веха",
         audio: "Растворяемся вдвоем.mp3",
-        cover: "мы растворяемся вдвоем.png",
+        cover: "растворяемся.png",
         lyrics: `
 Здесь будет текст песни "Мы растворяемся вдвоём"
         `
@@ -272,7 +272,7 @@ const songs = [
         release: null,
         album: "Новая веха",
         audio: "Гармония.mp3",
-        cover: "covers/album_novaya_veha.jpg",
+        cover: "covers/Novaya veha.png",
         lyrics: `
 Здесь будет текст песни "Гармония"
         `
@@ -332,7 +332,7 @@ const songs = [
         release: "2026-08-13",
         album: "Remixes",
         audio: "13.08-2.mp3",
-        cover: "Одним воздухом дышать (Remix).jpg",
+        cover: "Одним воздухом дышать (Remix).PNG",
         lyrics: `
 Здесь будет текст песни "Одним воздухом дышать (Remix)"
         `
@@ -344,7 +344,7 @@ const songs = [
         release: null,
         album: "Люмейя",
         audio: "Ритмы Люмейя.mp3",
-        cover: "covers/album_lumeya.jpg",
+        cover: "covers/album_lumeya.jpeg",
         lyrics: `
 Здесь будет текст песни "Ритмы Люмейя"
         `
@@ -356,7 +356,7 @@ const songs = [
         release: null,
         album: "Люмейя",
         audio: "Народ Люмейя.mp3",
-        cover: "covers/album_lumeya.jpg",
+        cover: "covers/album_lumeya.jpeg",
         lyrics: `
 Здесь будет текст песни "Народ Люмейя"
         `
@@ -368,7 +368,7 @@ const songs = [
         release: null,
         album: "Люмейя",
         audio: "Lum.mp3",
-        cover: "covers/album_lumeya.jpg",
+        cover: "covers/album_lumeya.jpeg",
         lyrics: `
 Здесь будет текст песни "Lum"
         `
@@ -380,7 +380,7 @@ const songs = [
         release: null,
         album: "Люмейя",
         audio: "Soliah.mp3",
-        cover: "covers/album_lumeya.jpg",
+        cover: "covers/album_lumeya.jpeg",
         lyrics: `
 Здесь будет текст песни "Soliah"
         `
@@ -392,7 +392,7 @@ const songs = [
         release: null,
         album: "Люмейя",
         audio: "Одно сердце.mp3",
-        cover: "covers/album_lumeya.jpg",
+        cover: "covers/album_lumeya.jpeg",
         lyrics: `
 Здесь будет текст песни "Одно сердце"
         `
